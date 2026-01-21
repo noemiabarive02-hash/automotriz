@@ -3,7 +3,14 @@
 require_once "cabecera/cabecera.php";
 
 
+
+require_once "controlador/empresa.controlador.php";
+require_once "controlador/zona.controlador.php";
+require_once "controlador/compania.controlador.php";
+
+
 ?>
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
@@ -21,23 +28,19 @@ require_once "cabecera/cabecera.php";
         <form id="loginForm">
           <div class="mb-3">
             <label class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" required>
+            <input type="email" id="loginCorreo" name="correo" class="form-control" required>
           </div>
 
           <div class="mb-3">
             <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" required>
+            <input type="password" id="loginPassword" name="password" class="form-control" required>
           </div>
 
-          <center> </center> <button type="submit" class="btn btn-primary ">
+          <button type="submit" class="btn btn-primary">
             Iniciar sesión
           </button>
-
-          <p class="text-center mt-3">
-            ¿No tienes cuenta?
-            <a href="#" onclick="mostrarRegistro()" class="registrate">Registrarse</a>
-          </p>
         </form>
+
 
         <!-- REGISTRO -->
         <form id="registerForm" class="d-none">
@@ -45,68 +48,61 @@ require_once "cabecera/cabecera.php";
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" required>
+              <input type="text" name="nombre" class="form-control" required>
             </div>
 
             <div class="col-md-6 mb-3">
               <label class="form-label">Apellido</label>
-              <input type="text" class="form-control" required>
+              <input type="text" name="apellido" class="form-control" required>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Teléfono</label>
-              <input type="tel" class="form-control" required>
+              <input type="tel" name="telefono" class="form-control" required>
             </div>
 
             <div class="col-md-6 mb-3">
               <label class="form-label">Correo</label>
-              <input type="email" class="form-control" required>
+              <input type="email" name="correo" class="form-control" required>
             </div>
           </div>
 
           <div class="mb-3">
-              <label class="form-label">Empresa</label>
-              <select name="id_empresa"  id="id_empresa"   class="form-control" required>
-                <option value="">Seleccione una empresa</option>
-
-                <?php foreach ($empresas as $empresa): ?>
-                  <option value="<?= $empresa['id_empresa']; ?>">
-                    <?= htmlspecialchars($empresa['nombre_empresa']); ?>
-                  </option>
-                <?php endforeach; ?>
-
-              </select>
-            </div>
-
+            <label class="form-label">Empresa</label>
+            <select name="id_empresa" id="id_empresa" class="form-control" required>
+              <option value="">Seleccione una empresa</option>
+              <?php foreach ($empresas as $empresa): ?>
+                <option value="<?= $empresa['id_empresa']; ?>">
+                  <?= htmlspecialchars($empresa['nombre_empresa']); ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Zona</label>
-              <select name="id_zona" id="id_zona"  class="form-control" required>
+              <select name="id_zona" id="id_zona" class="form-control" required>
                 <option value="">Seleccione una Zona</option>
-
                 <?php foreach ($zona as $z): ?>
                   <option value="<?= $z['id_zona_localidad']; ?>">
                     <?= htmlspecialchars($z['descripcion']); ?>
                   </option>
                 <?php endforeach; ?>
-
               </select>
             </div>
 
             <div class="col-md-6 mb-3">
               <label class="form-label">Compañía</label>
-            <select name="id_compania" id="id_compania" class="form-control" required>
+              <select name="id_compania" id="id_compania" class="form-control" required>
                 <option value="">Seleccione una Compañia</option>
-
                 <?php foreach ($compania as $c): ?>
                   <option value="<?= $c['id_compania']; ?>">
                     <?= htmlspecialchars($c['descripcion']); ?>
                   </option>
                 <?php endforeach; ?>
-
               </select>
             </div>
           </div>
@@ -114,27 +110,19 @@ require_once "cabecera/cabecera.php";
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Contraseña</label>
-              <input type="password" id="password" class="form-control" required>
+              <input type="password" id="password" name="password" class="form-control" required>
             </div>
 
             <div class="col-md-6 mb-3">
               <label class="form-label">Confirmar contraseña</label>
-              <input type="password" id="confirmPassword" class="form-control" required>
+              <input type="password" id="confirmPassword" name="confirm_password" class="form-control" required>
             </div>
-          </div>
-
-          <div id="passwordError" class="text-danger small d-none mb-2">
-            Las contraseñas no coinciden
           </div>
 
           <button type="submit" class="btn btn-success">
             Registrar usuario
           </button>
 
-          <p class="text-center mt-3">
-            ¿Ya tienes cuenta?
-            <a href="#" onclick="mostrarLogin()" class="registrate">Iniciar sesión</a>
-          </p>
         </form>
 
       </div>

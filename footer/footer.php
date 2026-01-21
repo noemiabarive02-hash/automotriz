@@ -39,21 +39,27 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="./js/index.js"></script>
-<script src="./node_modules/select2/dist/js/select2.min.js"></script>
 
+<script src="./node_modules/select2/dist/js/select2.min.js"></script>
+<script src="./node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="./js/index.js"></script>
 </body>
 </html>
 
 
 <script>
-$(document).ready(function () {
+$('#exampleModal').on('shown.bs.modal', function () {
 
-    $('#id_empresa, #id_zona, #id_compania').select2({
-        width: '100%',
-        dropdownParent: $('#exampleModal')
-    });
+  $('#id_empresa, #id_zona, #id_compania').each(function () {
+    if (!$(this).hasClass("select2-hidden-accessible")) {
+      $(this).select2({
+        dropdownParent: $('#exampleModal'),
+        width: '100%'
+      });
+    }
+  });
 
 });
+
 </script>
 

@@ -1,27 +1,19 @@
-<?php
-require_once "cabecera/cabecera.php";
-require_once "controlador/empresa.controlador.php";
-require_once "controlador/zona.controlador.php";
-require_once "controlador/compania.controlador.php";
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plastiauto Perú | Reparación Automotriz</title>
+<title>Plastiauto Perú  Reparación Automotriz</title>
 
 <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
 <link rel="stylesheet" href="./css/style.css">
 <link rel="stylesheet" href="./node_modules/select2/dist/css/select2.min.css">
-
+<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
 </head>
 
 <body>
 
-<!-- TOP BAR -->
 <div class="container-fluid top-bar py-2 text-center">
   <div class="row">
     <div class="col-md-4"><i class="bi bi-whatsapp"></i> 999 999 999</div>
