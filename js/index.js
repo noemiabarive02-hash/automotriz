@@ -247,75 +247,94 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-
   const loginForm = document.getElementById("loginForm");
+  if (!loginForm) return;
 
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const formData = new FormData(loginForm);
+    const submitBtn = loginForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
 
-      console.log("📦 [LOGIN] Enviando:");
-      for (const [k, v] of formData.entries()) console.log(" -", k, v);
+    const formData = new FormData(loginForm);
 
-      Swal.fire({
-        title: "Iniciando sesión...",
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading()
+    console.group("🔐 LOGIN");
+    console.log("📦 Enviando:");
+    for (const [k, v] of formData.entries()) console.log(" -", k, v);
+
+    Swal.fire({
+      title: "Iniciando sesión...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
+
+    try {
+      const res = await fetch("ajax/auth/login.ajax.php", {
+        method: "POST",
+        body: formData,
+        headers: { "X-Requested-With": "XMLHttpRequest" }
       });
 
-      try {
-        const res = await fetch("ajax/auth/login.ajax.php", {
-          method: "POST",
-          body: formData
-        });
+      const raw = await res.text();
+      console.log("🧾 RAW RESPONSE:", raw);
 
-        const raw = await res.text();
-        console.log("🧾 [LOGIN RAW RESPONSE]:", raw);
-
-        let data;
-        try {
-          data = JSON.parse(raw);
-        } catch (err) {
-          Swal.close();
-          console.error("❌ JSON inválido:", err);
-          Swal.fire("Error", "Respuesta inválida del servidor", "error");
-          return;
-        }
-
+      // ✅ Si el servidor responde 404/500, corta aquí
+      if (!res.ok) {
         Swal.close();
-        console.log("✅ [LOGIN JSON]:", data);
+        console.error(`❌ HTTP Error ${res.status}`);
+        Swal.fire("Error", `Servidor respondió ${res.status}`, "error");
+        return;
+      }
 
-        if (data.status === "success") {
-          Swal.fire("Éxito", data.message, "success");
-
-          // Cerrar modal (opcional)
-          const modalEl = document.getElementById("exampleModal");
-          if (modalEl) {
-            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-            modal.hide();
-          }
-
-          // ✅ Redirigir a atencion_cliente.php
-          // Si el backend manda redirect, lo usa. Si no, usa ruta por defecto.
-          const destino = data.redirect || "modelo/atencion_cliente.php";
-          console.log("➡️ Redirigiendo a:", destino);
-
-          setTimeout(() => {
-            window.location.href = destino;
-          }, 600);
-
-        } else {
-          Swal.fire("Error", data.message, "error");
-        }
-
+      // ✅ Parseo seguro JSON
+      let data;
+      try {
+        data = JSON.parse(raw);
       } catch (err) {
         Swal.close();
-        console.error("🔥 Error fetch:", err);
-        Swal.fire("Error", "No se pudo iniciar sesión", "error");
+        console.error("❌ JSON inválido:", err);
+        Swal.fire("Error", "El servidor no devolvió JSON válido", "error");
+        return;
       }
-    });
-  }
 
+      Swal.close();
+      console.log("✅ JSON:", data);
+
+      if (data.status === "success") {
+        const destino = data.redirect || "modelo/atencion_cliente.php";
+        console.log("➡️ Redirigiendo a:", destino);
+
+        // Cerrar modal (opcional)
+        const modalEl = document.getElementById("exampleModal");
+        if (modalEl) {
+          const bsModal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+          bsModal.hide();
+        }
+
+        // ✅ Espera a que SweetAlert termine para redirigir sí o sí
+        await Swal.fire({
+          icon: "success",
+          title: "Éxito",
+          text: data.message || "Inicio de sesión correcto",
+          timer: 900,
+          showConfirmButton: false
+        });
+
+        // ✅ Redirección fuerte + fallback
+        window.location.assign(destino);
+        setTimeout(() => (window.location.href = destino), 500);
+
+      } else {
+        Swal.fire("Error", data.message || "Credenciales incorrectas", "error");
+      }
+
+    } catch (err) {
+      Swal.close();
+      console.error("🔥 Error fetch:", err);
+      Swal.fire("Error", "No se pudo iniciar sesión (red/servidor)", "error");
+    } finally {
+      console.groupEnd();
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
 });
