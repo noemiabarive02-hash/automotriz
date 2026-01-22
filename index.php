@@ -36,9 +36,18 @@ require_once "controlador/compania.controlador.php";
             <input type="password" id="loginPassword" name="password" class="form-control" required>
           </div>
 
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary w-100">
             Iniciar sesión
           </button>
+
+          <!-- ✅ Cambio a Registro -->
+          <p class="text-center mt-3 mb-0">
+            ¿No tienes cuenta?
+            <a href="#" class="registrate"
+               onclick="mostrarRegistro(); return false;">
+              Regístrate
+            </a>
+          </p>
         </form>
 
 
@@ -119,16 +128,29 @@ require_once "controlador/compania.controlador.php";
             </div>
           </div>
 
-          <button type="submit" class="btn btn-success">
+          <div id="passwordError" class="text-danger small d-none mb-2">
+            Las contraseñas no coinciden
+          </div>
+
+          <button type="submit" class="btn btn-success w-100">
             Registrar usuario
           </button>
 
+          <!-- ✅ Cambio a Login -->
+          <p class="text-center mt-3 mb-0">
+            ¿Ya tienes cuenta?
+            <a href="#" class="registrate"
+               onclick="mostrarLogin(); return false;">
+              Iniciar sesión
+            </a>
+          </p>
         </form>
 
       </div>
     </div>
   </div>
 </div>
+
 
 
 
